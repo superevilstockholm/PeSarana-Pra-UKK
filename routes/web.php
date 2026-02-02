@@ -12,6 +12,7 @@ Route::get('/', function () {
 // Optional Protected
 Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
     Route::match(['get', 'post'], 'login', [AuthController::class, 'login'])->name('login');
+    Route::match(['get', 'post'], 'signup', [AuthController::class, 'signup'])->name('signup');
 });
 
 // Protected
