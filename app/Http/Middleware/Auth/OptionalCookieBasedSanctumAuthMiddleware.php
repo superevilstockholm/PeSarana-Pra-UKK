@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
-class CookieBasedSanctumAuthMiddleware
+class OptionalCookieBasedSanctumAuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,15 +19,15 @@ class CookieBasedSanctumAuthMiddleware
     {
         $token = $request->cookie('auth-token');
         if (!$token) {
-            return redirect()->route('login');
+            return $next($request);
         }
         $accessToken = PersonalAccessToken::findToken($token);
         if (!$accessToken || !$accessToken->tokenable) {
-            return redirect()->route('login')->withoutCookie('auth-token');
+            return $next($request);
         }
         if ($accessToken->expires_at || $accessToken->expires_at->isPast()) {
             $accessToken->delete();
-            return redirect()->route('login')->withoutCookie('auth-token');
+            return $next($request);
         }
         Auth::setUser($accessToken->tokenable);
         $request->setUserResolver(fn() => $accessToken->tokenable);
