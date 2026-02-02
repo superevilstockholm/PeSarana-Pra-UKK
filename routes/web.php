@@ -11,12 +11,15 @@ Route::get('/', function () {
 
 // Optional Protected
 Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
+    // Auth
     Route::match(['get', 'post'], 'login', [AuthController::class, 'login'])->name('login');
     Route::match(['get', 'post'], 'signup', [AuthController::class, 'signup'])->name('signup');
 });
 
 // Protected
 Route::middleware(['auth.sanctum.cookie'])->group(function () {
+    // Auth
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::middleware(['role:admin'])->group(function () {
 
     });

@@ -56,7 +56,7 @@ class AuthController extends Controller
             'email' => 'required|string|max:255|unique:users,email',
             'password' => 'required|string|min:8|max:255',
         ]);
-        $student = Student::where('nisn', $validated['nisn'])->whereDate('dob', $validated['dob'])->first();
+        $student = Student::with('user')->where('nisn', $validated['nisn'])->whereDate('dob', $validated['dob'])->first();
         if (!$student) {
             return back()->withErrors('NISN atau Tanggal Lahir salah.')->withInput();
         }
@@ -66,10 +66,17 @@ class AuthController extends Controller
         unset($validated['nisn'], $validated['dob']);
         $validated['name'] = $student->name;
         $validated['role'] = RoleEnum::STUDENT;
+        $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
         $student->update([
             'user_id' => $user->id,
         ]);
         return redirect()->route('login');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        $request->user()->tokens()->delete();
+        return redirect()->route('login')->withoutCookie('auth-token');
     }
 }
