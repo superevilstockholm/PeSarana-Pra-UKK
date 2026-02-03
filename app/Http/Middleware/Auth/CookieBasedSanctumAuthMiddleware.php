@@ -25,7 +25,7 @@ class CookieBasedSanctumAuthMiddleware
         if (!$accessToken || !$accessToken->tokenable) {
             return redirect()->route('login')->withoutCookie('auth-token');
         }
-        if ($accessToken->expires_at || $accessToken->expires_at->isPast()) {
+        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
             $accessToken->delete();
             return redirect()->route('login')->withoutCookie('auth-token');
         }

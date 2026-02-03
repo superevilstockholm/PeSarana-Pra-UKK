@@ -20,10 +20,16 @@ Route::middleware(['optional.auth.sanctum.cookie'])->group(function () {
 Route::middleware(['auth.sanctum.cookie'])->group(function () {
     // Auth
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::middleware(['role:admin'])->group(function () {
-
-    });
-    Route::middleware(['role:student'])->group(function () {
-
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+            Route::get('/', function () {
+                return view('pages.dashhboard.admin.index');
+            })->name('index');
+        });
+        Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
+            Route::get('/', function () {
+                return view('pages.dashhboard.student.index');
+            })->name('index');
+        });
     });
 });
