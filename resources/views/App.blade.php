@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="id" data-bs-theme="dark">
 <head>
+    {{-- Theme --}}
+    <script>
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        function applyThemeIcon(theme) {
+            const icon = document.getElementById('theme-icon');
+            if (!icon) return;
+            icon.classList.remove('ti-sun', 'ti-moon');
+            icon.classList.add(theme === 'light' ? 'ti-sun' : 'ti-moon');
+        }
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            const theme = (savedTheme === 'dark' || savedTheme === 'light') ? savedTheme : 'light';
+            applyTheme(theme);
+        })();
+    </script>
+    {{-- Meta --}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -13,6 +32,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('static/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('static/vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
     @stack('css')
 </head>
 <body>
