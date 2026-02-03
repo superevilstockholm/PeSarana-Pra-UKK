@@ -21,5 +21,16 @@
     <script src="{{ asset('static/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('static/js/sweetalert2.min.js') }}"></script>
     @stack('js')
+    {{-- Custom CSS Handle --}}
+    <style>
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 0 transparent inset !important;
+            box-shadow: 0 0 0 0 transparent inset !important;
+            color: var(--bs-body-color) !important;
+        }
+        input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+            -webkit-text-fill-color: var(--bs-body-color) !important;
+        }
+    </style>
 </body>
 </html>
