@@ -23,12 +23,20 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
             Route::get('/', function () {
-                return view('pages.dashhboard.admin.index');
+                return view('pages.dashhboard.admin.index', [
+                    'meta' => [
+                        'sidebarItems' => adminSidebarItems(),
+                    ]
+                ]);
             })->name('index');
         });
         Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
             Route::get('/', function () {
-                return view('pages.dashhboard.student.index');
+                return view('pages.dashhboard.student.index', [
+                    'meta' => [
+                        'sidebarItems' => studentSidebarItems(),
+                    ]
+                ]);
             })->name('index');
         });
     });

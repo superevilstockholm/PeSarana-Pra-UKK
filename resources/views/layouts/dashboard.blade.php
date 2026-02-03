@@ -66,7 +66,7 @@
 @endsection
 @push('css')
 <link rel="stylesheet" href="{{ asset('static/vendor/tabler-icons/tabler-icons.min.css') }}">
-<link rel="stylesheet" href="{{ asset('static/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('static/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('static/css/style-preset.css') }}">
 <link rel="stylesheet" href="{{ asset('static/css/custom.css') }}">
 @endpush

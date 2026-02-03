@@ -2,8 +2,7 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a href="{{ route('dashboard.' . auth()->user()->role->value . '.index') }}" class="b-brand d-flex align-items-center gap-2 fs-3 fw-bold">
-                <img style="height: 35px;" src="{{ asset('static/img/no-image-placeholder.svg') }}" alt="Logo PeSarana">
-                PeSarana
+                <img style="height: 35px;" src="{{ asset('static/img/logo-pesarana-2-transparent.svg') }}" alt="Logo PeSarana">
             </a>
         </div>
         <div class="navbar-content">

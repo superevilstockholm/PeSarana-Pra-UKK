@@ -52,7 +52,7 @@
                 <li class="dropdown pc-h-item header-user-profile">
                     <a class="pc-head-link head-link-primary dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img id="userProfilePicture" src="{{ auth()->user()->profile_picture_path_url }}"
+                        <img id="userProfilePicture" src="{{ auth()->user()->profile_picture_path_url ?? asset('static/img/default_profile.svg') }}"
                             alt="user-image" class="user-avtar object-fit-cover" style="width: 34px; height: 34px;" />
                         <span>
                             <i class="ti ti-settings"></i>
