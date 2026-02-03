@@ -18,7 +18,7 @@
                         <p class="text-center text-secondary fw-semibold">
                             Mendaftar ke PeSarana sebagai siswa untum mengakses dashboard kamu.
                         </p>
-                        <form class="p-0 m-0 w-100 h-100" action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
+                        <form class="p-0 m-0 w-100 h-100" action="{{ route('signup') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input name="nisn" type="text" class="form-control" id="floatingInputNISN" placeholder="NISN" value="{{ old('nisn') }}" inputmode="numeric" maxlength="10" required>

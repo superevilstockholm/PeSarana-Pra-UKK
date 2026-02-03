@@ -71,7 +71,7 @@ class AuthController extends Controller
         $student->update([
             'user_id' => $user->id,
         ]);
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Berhasil membuat user.');
     }
 
     public function logout(Request $request): RedirectResponse
