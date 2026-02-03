@@ -11,6 +11,9 @@ use App\Models\User;
 // Enums
 use App\Enums\RoleEnum;
 
+// Seeders
+use Database\Seeders\MasterData\ClassroomSeeder;
+
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -30,5 +33,8 @@ class DatabaseSeeder extends Seeder
             'role' => RoleEnum::ADMIN,
             'email_verified_at' => now(),
         ]);
+
+        // Classrooms
+        $this->call(ClassroomSeeder::class);
     }
 }
