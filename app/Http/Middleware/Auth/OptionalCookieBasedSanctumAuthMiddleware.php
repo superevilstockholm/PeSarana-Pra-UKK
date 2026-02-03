@@ -25,7 +25,7 @@ class OptionalCookieBasedSanctumAuthMiddleware
         if (!$accessToken || !$accessToken->tokenable) {
             return $next($request);
         }
-        if ($accessToken->expires_at || $accessToken->expires_at->isPast()) {
+        if ($accessToken->expires_at && $accessToken->expires_at->isPast()) {
             $accessToken->delete();
             return $next($request);
         }

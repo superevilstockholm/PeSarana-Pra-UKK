@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function login(Request $request): View | RedirectResponse
     {
         if ($request->user()) {
-            return redirect()->route('dashboard.' . $request->user()->role . '.index');
+            return redirect()->route('dashboard.' . $request->user()->role->value . '.index');
         }
         if ($request->isMethod('get')) {
             return view('pages.auth.login');
@@ -45,7 +45,7 @@ class AuthController extends Controller
     public function signup(Request $request): View | RedirectResponse
     {
         if ($request->user()) {
-            return redirect()->route('dashboard.' . $request->user()->role . '.index');
+            return redirect()->route('dashboard.' . $request->user()->role->value . '.index');
         }
         if ($request->isMethod('get')) {
             return view('pages.auth.signup');
