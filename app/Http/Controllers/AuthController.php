@@ -51,7 +51,7 @@ class AuthController extends Controller
             return view('pages.auth.signup');
         }
         $validated = $request->validate([
-            'nisn' => 'required|string|size:10',
+            'nisn' => 'required|digits:10',
             'dob' => 'required|date',
             'email' => 'required|string|max:255|unique:users,email',
             'password' => 'required|string|min:8|max:255',

@@ -2,14 +2,14 @@
 {{-- ->with('success', '...') | ->with('error', '...') | ->('warning', '...') | ->('info', '...') --}}
 @foreach (['success', 'error', 'warning', 'info'] as $msg)
     @if (session($msg))
-        <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }}" role="alert">
+        <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }}" style="font-size: 0.9rem !important;" role="alert">
             {{ session($msg) }}
         </div>
     @endif
 @endforeach
 {{-- ->withErrors('...') | ->withErrors(['...', '...']) --}}
 @if ($errors->any())
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-danger" style="font-size: 0.9rem !important;" role="alert">
         {{ $errors->first() }}
     </div>
 @endif
