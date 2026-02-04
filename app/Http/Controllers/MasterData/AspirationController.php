@@ -91,9 +91,22 @@ class AspirationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Aspiration $aspiration)
+    public function show(Aspiration $aspiration, Request $request): View
     {
-        //
+        $user = $request->user()->load('student');
+        if ($user->role === RoleEnum::STUDENT && $aspiration->student_id !== $user->student->id) {
+            abort(403, 'Forbidden');
+        }
+        return view($user->role === RoleEnum::ADMIN
+            ? 'pages.dashboard.admin.master-data.aspiration.show'
+            : 'pages.dashboard.student.aspiration.show', [
+            'meta' => [
+                'sidebarItems' => $user->role === RoleEnum::ADMIN
+                    ? adminSidebarItems()
+                    : studentSidebarItems(),
+            ],
+            'aspiration' => $aspiration->load(['student', 'category'])
+        ]);
     }
 
     /**
