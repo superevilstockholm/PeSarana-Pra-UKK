@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 // Models
 use App\Models\User;
 use App\Models\MasterData\Classroom;
+use App\Models\MasterData\Aspiration;
 
 class Student extends Model
 {
@@ -32,5 +33,10 @@ class Student extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function aspirations()
+    {
+        return $this->hasMany(Aspiration::class);
     }
 }
