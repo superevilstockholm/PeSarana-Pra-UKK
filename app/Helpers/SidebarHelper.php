@@ -9,6 +9,9 @@ if (!function_exists('adminSidebarItems')) {
             'main' => [
                 ['label' => 'dashboard', 'icon' => 'ti ti-dashboard', 'route' => 'dashboard.admin.index'],
             ],
+            'master data' => [
+                ['label' => 'aspirations', 'icon' => 'ti ti-flag', 'route' => 'dashboard.admin.master-data.aspirations.index'],
+            ],
         ];
         foreach ($items as $group => &$groupItems) {
             foreach ($groupItems as &$item) {
@@ -29,11 +32,12 @@ if (!function_exists('studentSidebarItems')) {
         $items = [
             'main' => [
                 ['label' => 'dashboard', 'icon' => 'ti ti-dashboard', 'route' => 'dashboard.student.index'],
+                ['label' => 'aspirations', 'icon' => 'ti ti-flag', 'route' => 'dashboard.student.aspirations.index'],
             ],
         ];
         foreach ($items as $group => &$groupItems) {
             foreach ($groupItems as &$item) {
-                if ($item['route'] === 'dashboard.admin.index') {
+                if ($item['route'] === 'dashboard.student.index') {
                     $item['active_pattern'] = $item['route'];
                 } else {
                     $item['active_pattern'] = Str::replaceLast('.index', '.*', $item['route']);
