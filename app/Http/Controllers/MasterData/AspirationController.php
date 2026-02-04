@@ -5,12 +5,15 @@ namespace App\Http\Controllers\MasterData;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 // Models
+use App\Models\MasterData\Category;
 use App\Models\MasterData\Aspiration;
 
 // Enums
 use App\Enums\RoleEnum;
+use App\Enums\AspirationStatusEnum;
 
 class AspirationController extends Controller
 {
@@ -48,17 +51,41 @@ class AspirationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $categories = Category::all();
+        return view('pages.dashboard.student.aspiration.create', [
+            'meta' => [
+                'sidebarItems' => studentSidebarItems(),
+            ],
+            'categories' => $categories,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $user = $request->user()->load('student');
+        if (!$user->student) {
+            return redirect()->route('dashboard.student.aspirations.index')->withErrors('Data siswa tidak ditemukan.');
+        }
+        $validated = $request->validate([
+            'cover_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'location' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image_path'] = $request->file('cover_image')->store('aspirations', 'public');
+        }
+        unset($validated['cover_image']);
+        $validated['student_id'] = $user->student->id;
+        $validated['status'] = AspirationStatusEnum::PENDING;
+        Aspiration::create($validated);
+        return redirect()->route('dashboard.student.aspirations.index')->with('success', 'Berhasil membuat aspirasi.');
     }
 
     /**
