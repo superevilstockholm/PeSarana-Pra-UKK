@@ -14,6 +14,7 @@ use App\Models\MasterData\Aspiration;
 // Enums
 use App\Enums\RoleEnum;
 use App\Enums\AspirationStatusEnum;
+use Illuminate\Support\Facades\Storage;
 
 class AspirationController extends Controller
 {
@@ -128,8 +129,18 @@ class AspirationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Aspiration $aspiration)
+    public function destroy(Aspiration $aspiration, Request $request): RedirectResponse
     {
-        //
+        $user = $request->user()->load('student');
+        if ($user->role === RoleEnum::STUDENT && $aspiration->student_id !== $user->student->id) {
+            abort(403, 'Forbidden');
+        }
+        if ($aspiration->cover_image_path) {
+            Storage::disk('public')->delete($aspiration->cover_image_path);
+        }
+        $aspiration->delete();
+        return redirect()->route($user->role === RoleEnum::ADMIN
+            ? 'dashboard.admin.master-data.aspirations.index'
+            : 'dashboard.student.aspirations.index')->with('success', 'Berhasil menghapus aspirasi.');
     }
 }
