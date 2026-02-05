@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 // Models
 use App\Models\MasterData\Student;
 use App\Models\MasterData\Category;
+use App\Models\MasterData\AspirationImage;
 
 // Enums
 use App\Enums\AspirationStatusEnum;
@@ -49,5 +50,10 @@ class Aspiration extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function aspiration_images()
+    {
+        return $this->hasMany(AspirationImage::class);
     }
 }
