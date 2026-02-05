@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 // Models
 use App\Models\MasterData\Category;
 use App\Models\MasterData\Aspiration;
-use Illuminate\Support\Facades\Storage;
 
 // Enums
 use App\Enums\RoleEnum;
@@ -73,16 +72,11 @@ class AspirationController extends Controller
             return redirect()->route('dashboard.student.aspirations.index')->withErrors('Data siswa tidak ditemukan.');
         }
         $validated = $request->validate([
-            'cover_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'location' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id'
         ]);
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image_path'] = $request->file('cover_image')->store('aspirations', 'public');
-        }
-        unset($validated['cover_image']);
         $validated['student_id'] = $user->student->id;
         $validated['status'] = AspirationStatusEnum::PENDING;
         Aspiration::create($validated);
@@ -106,7 +100,7 @@ class AspirationController extends Controller
                     ? adminSidebarItems()
                     : studentSidebarItems(),
             ],
-            'aspiration' => $aspiration->load(['student', 'category'])
+            'aspiration' => $aspiration->load(['student', 'category', 'aspiration_images'])
         ]);
     }
 
@@ -121,7 +115,7 @@ class AspirationController extends Controller
                 'sidebarItems' => studentSidebarItems(),
             ],
             'categories' => $categories,
-            'aspiration' => $aspiration,
+            'aspiration' => $aspiration->load(['student', 'category', 'aspiration_images']),
         ]);
     }
 
@@ -135,19 +129,11 @@ class AspirationController extends Controller
             return redirect()->route('dashboard.student.aspirations.index')->withErrors('Data siswa tidak ditemukan.');
         }
         $validated = $request->validate([
-            'cover_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'location' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id'
         ]);
-        if ($request->hasFile('cover_image')) {
-            if ($aspiration->cover_image_path) {
-                Storage::disk('public')->delete($aspiration->cover_image_path);
-            }
-            $validated['cover_image_path'] = $request->file('cover_image')->store('aspirations', 'public');
-        }
-        unset($validated['cover_image']);
         $aspiration->update($validated);
         return redirect()->route('dashboard.student.aspirations.index')->with('success', 'Berhasil memperbarui aspirasi.');
     }
@@ -160,9 +146,6 @@ class AspirationController extends Controller
         $user = $request->user()->load('student');
         if ($user->role === RoleEnum::STUDENT && $aspiration->student_id !== $user->student->id) {
             abort(403, 'Forbidden');
-        }
-        if ($aspiration->cover_image_path) {
-            Storage::disk('public')->delete($aspiration->cover_image_path);
         }
         $aspiration->delete();
         return redirect()->route($user->role === RoleEnum::ADMIN
