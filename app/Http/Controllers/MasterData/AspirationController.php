@@ -113,17 +113,43 @@ class AspirationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Aspiration $aspiration)
+    public function edit(Aspiration $aspiration): View
     {
-        //
+        $categories = Category::all();
+        return view('pages.dashboard.student.aspiration.edit', [
+            'meta' => [
+                'sidebarItems' => studentSidebarItems(),
+            ],
+            'categories' => $categories,
+            'aspiration' => $aspiration,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Aspiration $aspiration)
+    public function update(Request $request, Aspiration $aspiration): RedirectResponse
     {
-        //
+        $user = $request->user();
+        if (!$user->student) {
+            return redirect()->route('dashboard.student.aspirations.index')->withErrors('Data siswa tidak ditemukan.');
+        }
+        $validated = $request->validate([
+            'cover_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'location' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+        if ($request->hasFile('cover_image')) {
+            if ($aspiration->cover_image_path) {
+                Storage::disk('public')->delete($aspiration->cover_image_path);
+            }
+            $validated['cover_image_path'] = $request->file('cover_image')->store('aspirations', 'public');
+        }
+        unset($validated['cover_image']);
+        $aspiration->update($validated);
+        return redirect()->route('dashboard.student.aspirations.index')->with('success', 'Berhasil memperbarui aspirasi.');
     }
 
     /**
