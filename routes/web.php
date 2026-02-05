@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Auth Controller
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MasterData\AspirationController;
 
 Route::get('/', function () {
     return view('pages.index');
@@ -23,21 +24,29 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
             Route::get('/', function () {
-                return view('pages.dashhboard.admin.index', [
+                return view('pages.dashboard.admin.index', [
                     'meta' => [
                         'sidebarItems' => adminSidebarItems(),
                     ]
                 ]);
             })->name('index');
+            Route::prefix('master-data')->name('master-data.')->group(function () {
+                Route::resource('aspirations', AspirationController::class)->parameters([
+                    'aspirations' => 'aspiration',
+                ])->only(['index', 'show', 'destroy']);
+            });
         });
         Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
             Route::get('/', function () {
-                return view('pages.dashhboard.student.index', [
+                return view('pages.dashboard.student.index', [
                     'meta' => [
                         'sidebarItems' => studentSidebarItems(),
                     ]
                 ]);
             })->name('index');
+            Route::resource('aspirations', AspirationController::class)->parameters([
+                'aspirations' => 'aspiration',
+            ]);
         });
     });
 });
