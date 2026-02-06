@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 // Models
 use App\Models\MasterData\Category;
@@ -138,13 +139,37 @@ class AspirationController extends Controller
         if (!$user->student) {
             return redirect()->route('dashboard.student.aspirations.index')->withErrors('Data siswa tidak ditemukan.');
         }
+        if ($aspiration->status === AspirationStatusEnum::COMPLETED) {
+            return redirect()->route('dashboard.student.aspirations.index')->withErrors('Tidak dapat mengubah aspirasi yang sudah selesai.');
+        }
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'location' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'aspiration_images' => 'nullable|array',
+            'aspiration_images.*' => 'image|mimes:jpg,png,jpeg,webp|max:4096',
+            'deleted_images' => 'nullable|array',
+            'deleted_images.*' => 'exists:aspiration_images,id',
         ]);
         $aspiration->update($validated);
+        if (!empty($validated['deleted_images'])) {
+            $imagesToDelete = $aspiration->aspiration_images()
+                ->whereIn('id', $validated['deleted_images'])
+                ->get();
+            foreach ($imagesToDelete as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+        if ($request->hasFile('aspiration_images')) {
+            foreach ($request->file('aspiration_images') as $image) {
+                $path = $image->store('aspiration_images', 'public');
+                $aspiration->aspiration_images()->create([
+                    'image_path' => $path,
+                ]);
+            }
+        }
         return redirect()->route('dashboard.student.aspirations.index')->with('success', 'Berhasil memperbarui aspirasi.');
     }
 
