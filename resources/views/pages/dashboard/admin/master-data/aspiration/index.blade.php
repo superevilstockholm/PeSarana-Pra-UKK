@@ -79,7 +79,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <img class="object-fit-cover rounded" style="width: 100px; height: 100px; object-position: center;" src="{{ $aspiration->cover_image_path_url }}" alt="{{ $aspiration->title ?? '-' }}">
+                                            <img class="object-fit-cover rounded" style="width: 100px; height: 100px; object-position: center;" src="{{ $aspiration->aspiration_images->first() ? $aspiration->aspiration_images->first()->image_path_url : asset('static/img/no-image-placeholder.svg') }}" alt="{{ $aspiration->title ?? '-' }}">
                                         </td>
                                         <td>{{ $aspiration->title ?? '-' }}</td>
                                         <td>{{ $aspiration->content ? Str::limit($aspiration->content, 60, '...') : '-' }}</td>
