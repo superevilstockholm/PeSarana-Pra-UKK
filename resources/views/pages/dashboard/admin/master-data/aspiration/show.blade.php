@@ -33,8 +33,14 @@
                 <div class="card-body">
                     <h4 class="card-title fw-semibold mb-4">Data Aspirasi</h4>
                     <div class="row mb-4">
-                        <div class="col">
-                            <img class="object-fit-cover rounded" style="height: 150px; width: 150px;" src="{{ $aspiration->cover_image_path_url }}" alt="{{ $aspiration->title ?? '-' }}">
+                        <div class="col d-flex align-items-center gap-2">
+                            @foreach ($aspiration->aspiration_images as $image)
+                            <img class="object-fit-cover rounded me-2 mb-2 img-preview"
+                                style="height: 150px; width: 150px; cursor: zoom-in;"
+                                src="{{ $image->image_path_url }}"
+                                alt="{{ $aspiration->title ?? '-' }}"
+                                data-full="{{ $image->image_path_url }}">
+                            @endforeach
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -97,6 +103,16 @@
             </div>
         </div>
     </div>
+    <!-- Modal Preview Image -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0 shadow-none">
+                <div class="modal-body p-0 text-center">
+                    <img id="previewImage" src="" class="img-fluid rounded shadow" alt="Preview">
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.btn-delete').forEach(function (btn) {
@@ -117,6 +133,16 @@
                             document.getElementById('form-delete-' + aspirationId).submit();
                         }
                     });
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.img-preview').forEach(img => {
+                img.addEventListener('click', function () {
+                    const fullImageUrl = this.getAttribute('data-full');
+                    document.getElementById('previewImage').src = fullImageUrl;
+                    const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+                    modal.show();
                 });
             });
         });
