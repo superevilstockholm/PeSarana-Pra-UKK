@@ -111,15 +111,18 @@ class AspirationController extends Controller
                     ? adminSidebarItems()
                     : studentSidebarItems(),
             ],
-            'aspiration' => $aspiration->load(['student', 'category', 'aspiration_images'])
+            'aspiration' => $aspiration->load(['student', 'category', 'aspiration_images', 'aspiration_feedbacks']),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Aspiration $aspiration): View
+    public function edit(Aspiration $aspiration): View | RedirectResponse
     {
+        if ($aspiration->status !== AspirationStatusEnum::PENDING) {
+            return redirect()->route('dashboard.student.aspirations.index')->withErrors('Tidak dapat mengubah aspirasi yang ');
+        }
         $categories = Category::all();
         return view('pages.dashboard.student.aspiration.edit', [
             'meta' => [

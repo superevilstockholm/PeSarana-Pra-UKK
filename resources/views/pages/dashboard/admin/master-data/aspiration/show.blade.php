@@ -29,9 +29,9 @@
     </div>
     <div class="row">
         <div class="col-lg-8 mb-4 mb-lg-0">
-            <div class="card my-0">
+            <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title fw-semibold mb-4">Data Aspirasi</h4>
+                    <h4 class="card-title fw-semibold mb-3">Data Aspirasi</h4>
                     <div class="row mb-4">
                         <div class="col d-flex align-items-center gap-2">
                             @foreach ($aspiration->aspiration_images as $image)
@@ -53,7 +53,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted">Status</div>
-                        <div class="col-md-8 fw-medium">{{ $aspiration->status?->value ? ucwords(strtolower($aspiration->status->value)) : '-' }}</div>
+                        <div class="col-md-8 fw-medium">{{ $aspiration->status->label() ?? '-' }}</div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted">Kategori</div>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12 text-muted mb-3">Konten</div>
-                        <div class="col-md-12 fw-normal fs-6">{!! $aspiration->content ? Str::markdown($aspiration->content) : '-' !!}</div>
+                        <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $aspiration->content ? Str::markdown($aspiration->content) : '-' !!}</div>
                     </div>
                     <h4 class="card-title fw-semibold mt-4 mb-3">Informasi Sistem</h4>
                     <div class="row mb-3">
@@ -76,10 +76,81 @@
                         <div class="col-md-4 text-muted">Tanggal Dibuat</div>
                         <div class="col-md-8 fw-medium">{{ $aspiration->created_at?->format('d M Y H:i:s') ?? '-' }}</div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row">
                         <div class="col-md-4 text-muted">Terakhir Diperbarui</div>
                         <div class="col-md-8 fw-medium">{{ $aspiration->updated_at?->format('d M Y H:i:s') ?? '-' }}</div>
                     </div>
+                </div>
+            </div>
+            <div class="card mb-0">
+                <div class="card-body">
+                    <h4 class="card-title fw-semibold mb-3">Feedback Admin</h4>
+                    @if ($aspiration->aspiration_feedbacks->isEmpty())
+                        <div class="row">
+                            <div class="col-md-8 fw-medium">Belum ada feedback.</div>
+                        </div>
+                    @else
+                        @foreach ($aspiration->aspiration_feedbacks as $feedback)
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Status</div>
+                                <div class="col-md-8 fw-medium d-flex justify-content-between align-items-center">
+                                    <span>{{ $feedback->status->label() ?? '-' }}</span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Tindakan</div>
+                                <div class="col-md-8 fw-medium d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button" class="btn btn-sm btn-warning btn-edit-feedback" data-id="{{ $feedback->id }}" data-content="{{ $feedback->content }}">
+                                            <i class="ti ti-edit"></i>
+                                        </button>
+                                        @if ($loop->last && in_array($feedback->status, [AspirationStatusEnum::COMPLETED, AspirationStatusEnum::ON_GOING, AspirationStatusEnum::REJECTED]))
+                                            <form class="p-0 m-0" action="{{ route('dashboard.admin.master-data.aspiration-feedbacks.destroy', $feedback->id) }}" method="POST" id="form-delete-feedback-{{ $feedback->id }}" class="ms-3">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-feedback" data-id="{{ $feedback->id }}">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 text-muted mb-3">Konten</div>
+                                <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $feedback->content ? Str::markdown($feedback->content) : '-' !!}</div>
+                            </div>
+                            <hr class="mb-0">
+                        @endforeach
+                    @endif
+                    @if ($aspiration->status === AspirationStatusEnum::PENDING || $aspiration->status === AspirationStatusEnum::ON_GOING)
+                        <h4 class="card-title fw-semibold mt-4 mb-3">Tambah Feedback</h4>
+                        <form action="{{ route('dashboard.admin.master-data.aspiration-feedbacks.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="aspiration_id" value="{{ $aspiration->id }}">
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Isi Feedback</label>
+                                <textarea name="content" rows="4" class="form-control" required>{{ old('content') }}</textarea>
+                            </div>
+                            @if ($aspiration->status === AspirationStatusEnum::PENDING)
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Tindakan</label>
+                                    <select name="is_rejected" class="form-select">
+                                        <option value="0" selected>Proses Aspirasi</option>
+                                        <option value="1">Tolak Aspirasi</option>
+                                    </select>
+                                </div>
+                            @endif
+                            @if ($aspiration->status === AspirationStatusEnum::ON_GOING)
+                                <div class="alert alert-info small">
+                                    Feedback ini akan menandai aspirasi sebagai <strong>Selesai</strong>.
+                                </div>
+                            @endif
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="ti ti-send me-1"></i> Kirim Feedback
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -97,19 +168,46 @@
                     <hr class="my-4">
                     <h4 class="card-title fw-semibold mb-3">Catatan</h4>
                     <p class="text-muted small">
-                        Halaman ini hanya menampilkan detail data yang tersimpan. Untuk mengubah, klik tombol "Edit Aspirasi".
+                        Halaman ini hanya menampilkan detail data yang tersimpan. Untuk menghapus, klik tombol "Hapus Aspirasi".
                     </p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Modal Preview Image -->
+    {{-- Modal Preview Image --}}
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-transparent border-0 shadow-none">
                 <div class="modal-body p-0 text-center">
                     <img id="previewImage" src="" class="img-fluid rounded shadow" alt="Preview">
                 </div>
+            </div>
+        </div>
+    </div>
+    {{-- Modal Edit Feedback --}}
+    <div class="modal fade" id="editFeedbackModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="form-edit-feedback" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Feedback</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label class="form-label fw-medium">Isi Feedback</label>
+                            <textarea name="content" id="edit-feedback-content" rows="4" class="form-control" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="ti ti-check me-1"></i> Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -146,5 +244,45 @@
                 });
             });
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn-delete-feedback').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const feedbackId = this.getAttribute('data-id');
+                    Swal.fire({
+                        title: "Hapus Feedback?",
+                        text: "Feedback ini akan dihapus dan status aspirasi akan dikembalikan.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('form-delete-feedback-' + feedbackId).submit();
+                        }
+                    });
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn-edit-feedback').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const feedbackId = this.dataset.id;
+                    const content = this.dataset.content;
+                    const form = document.getElementById('form-edit-feedback');
+                    form.action = "{{ route('dashboard.admin.master-data.aspiration-feedbacks.update', ':id') }}"
+                        .replace(':id', feedbackId);
+                    document.getElementById('edit-feedback-content').value = content;
+                    const modal = new bootstrap.Modal(document.getElementById('editFeedbackModal'));
+                    modal.show();
+                });
+            });
+        });
     </script>
+    <style>
+        .markdown-content p {
+            margin-bottom: 0 !important;
+        }
+    </style>
 @endsection

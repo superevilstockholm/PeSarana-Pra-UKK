@@ -5,8 +5,10 @@
 @section('content')
     <x-alerts :errors="$errors" />
     @php
-        use Illuminate\Contracts\Pagination\LengthAwarePaginator;
         use Illuminate\Support\Str;
+        use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+        // Enums
+        use App\Enums\AspirationStatusEnum;
     @endphp
     <div class="row mb-4">
         <div class="col">
@@ -103,10 +105,12 @@
                                                         href="{{ route('dashboard.student.aspirations.show', $aspiration->id) }}">
                                                         <i class="ti ti-eye me-1"></i> Lihat
                                                     </a>
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('dashboard.student.aspirations.edit', $aspiration->id) }}">
-                                                        <i class="ti ti-pencil me-1"></i> Edit
-                                                    </a>
+                                                    @if ($aspiration->status === AspirationStatusEnum::PENDING)
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('dashboard.student.aspirations.edit', $aspiration->id) }}">
+                                                            <i class="ti ti-pencil me-1"></i> Edit
+                                                        </a>
+                                                    @endif
                                                     <form id="form-delete-{{ $aspiration->id }}"
                                                         action="{{ route('dashboard.student.aspirations.destroy', $aspiration->id) }}"
                                                         method="POST">

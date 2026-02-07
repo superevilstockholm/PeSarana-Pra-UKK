@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 // Models
 use App\Models\MasterData\Student;
+use App\Models\MasterData\AspirationFeedback;
 
 // Enums
 use App\Enums\RoleEnum;
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function aspiration_feedbacks()
+    {
+        return $this->hasMany(AspirationFeedback::class);
     }
 }

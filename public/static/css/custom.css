@@ -184,3 +184,13 @@ input:-webkit-autofill:active {
 .pagination {
     margin-bottom: 0 !important;
 }
+
+html[data-bs-theme="dark"] .modal-content {
+    background-color: rgb(24, 24, 24) !important;
+}
+html[data-bs-theme="dark"] .modal-header {
+    border-bottom-color: rgb(33, 33, 33) !important;
+}
+html[data-bs-theme="dark"] .modal-footer {
+    border-top-color: rgb(33, 33, 33) !important;
+}
