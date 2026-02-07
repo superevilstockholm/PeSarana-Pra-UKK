@@ -93,7 +93,20 @@
                         @foreach ($aspiration->aspiration_feedbacks as $feedback)
                             <div class="row mb-3">
                                 <div class="col-md-4 text-muted">Status</div>
-                                <div class="col-md-8 fw-medium">{{ $feedback->status->label() ?? '-' }}</div>
+                                <div class="col-md-8 fw-medium d-flex justify-content-between align-items-center">
+                                    <span>{{ $feedback->status->label() ?? '-' }}</span>
+                                    @if ($loop->last && in_array($feedback->status, [AspirationStatusEnum::COMPLETED, AspirationStatusEnum::ON_GOING, AspirationStatusEnum::REJECTED]))
+                                        <form action="{{ route('dashboard.admin.master-data.aspiration-feedbacks.destroy', $feedback->id) }}" method="POST" id="form-delete-feedback-{{ $feedback->id }}" class="ms-3">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger btn-delete-feedback"
+                                                    data-id="{{ $feedback->id }}">
+                                                <i class="ti ti-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-12 text-muted mb-3">Konten</div>
@@ -193,6 +206,27 @@
                     document.getElementById('previewImage').src = fullImageUrl;
                     const modal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
                     modal.show();
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.btn-delete-feedback').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const feedbackId = this.getAttribute('data-id');
+                    Swal.fire({
+                        title: "Hapus Feedback?",
+                        text: "Feedback ini akan dihapus dan status aspirasi akan dikembalikan.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('form-delete-feedback-' + feedbackId).submit();
+                        }
+                    });
                 });
             });
         });
