@@ -20,7 +20,7 @@
                                 @if($isDashboardOnly)
                                     Dashboard
                                 @else
-                                    <a href="{{ url('dashboard') }}">Dashboard</a>
+                                    <a href="{{ route('dashboard.' . auth()->user()->role->value . '.index') }}">Dashboard</a>
                                 @endif
                             </li>
                             @if($item)
