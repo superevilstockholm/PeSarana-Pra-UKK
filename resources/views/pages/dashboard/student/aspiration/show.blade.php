@@ -29,7 +29,7 @@
     </div>
     <div class="row">
         <div class="col-lg-8 mb-4 mb-lg-0">
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-body">
                     <h4 class="card-title fw-semibold mb-4">Data Aspirasi</h4>
                     <div class="row mb-4">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card mb-0">
                 <div class="card-body">
                     <h4 class="card-title fw-semibold mt-4 mb-3">Feedback Admin</h4>
                     @if ($aspiration->aspiration_feedbacks->isEmpty())
