@@ -202,8 +202,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">
                             <i class="ti ti-check me-1"></i> Simpan Perubahan
                         </button>
                     </div>
