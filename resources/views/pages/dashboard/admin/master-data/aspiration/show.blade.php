@@ -67,6 +67,27 @@
                         <div class="col-md-12 text-muted mb-3">Konten</div>
                         <div class="col-md-12 fw-normal fs-6">{!! $aspiration->content ? Str::markdown($aspiration->content) : '-' !!}</div>
                     </div>
+                    <h4 class="card-title fw-semibold mt-4 mb-3">Feedback Admin</h4>
+                    @if ($aspiration->aspiration_feedbacks->isEmpty())
+                        <p class="text-muted">Belum ada feedback.</p>
+                    @else
+                        <div class="list-group">
+                            @foreach ($aspiration->aspiration_feedbacks as $feedback)
+                                <div class="list-group-item mb-2 rounded shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong>{{ $feedback->user?->name ?? 'Admin' }}</strong>
+                                        <span class="badge bg-secondary">
+                                            {{ $feedback->status?->value ?? '-' }}
+                                        </span>
+                                    </div>
+                                    <p class="mb-1">{{ $feedback->content }}</p>
+                                    <small class="text-muted">
+                                        {{ $feedback->created_at?->format('d M Y H:i') }}
+                                    </small>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                     <h4 class="card-title fw-semibold mt-4 mb-3">Informasi Sistem</h4>
                     <div class="row mb-3">
                         <div class="col-md-4 text-muted">ID Aspirasi</div>
