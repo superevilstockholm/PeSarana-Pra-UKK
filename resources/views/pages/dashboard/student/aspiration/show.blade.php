@@ -31,7 +31,7 @@
         <div class="col-lg-8 mb-4 mb-lg-0">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title fw-semibold mb-4">Data Aspirasi</h4>
+                    <h4 class="card-title fw-semibold mb-3">Data Aspirasi</h4>
                     <div class="row mb-4">
                         <div class="col d-flex align-items-center gap-2">
                             @foreach ($aspiration->aspiration_images as $image)
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12 text-muted mb-3">Konten</div>
-                        <div class="col-md-12 fw-normal fs-6">{!! $aspiration->content ? Str::markdown($aspiration->content) : '-' !!}</div>
+                        <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $aspiration->content ? Str::markdown($aspiration->content) : '-' !!}</div>
                     </div>
                     <h4 class="card-title fw-semibold mt-4 mb-3">Informasi Sistem</h4>
                     <div class="row mb-3">
@@ -76,7 +76,7 @@
                         <div class="col-md-4 text-muted">Tanggal Dibuat</div>
                         <div class="col-md-8 fw-medium">{{ $aspiration->created_at?->format('d M Y H:i:s') ?? '-' }}</div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row">
                         <div class="col-md-4 text-muted">Terakhir Diperbarui</div>
                         <div class="col-md-8 fw-medium">{{ $aspiration->updated_at?->format('d M Y H:i:s') ?? '-' }}</div>
                     </div>
@@ -84,9 +84,9 @@
             </div>
             <div class="card mb-0">
                 <div class="card-body">
-                    <h4 class="card-title fw-semibold mt-4 mb-3">Feedback Admin</h4>
+                    <h4 class="card-title fw-semibold mb-3">Feedback Admin</h4>
                     @if ($aspiration->aspiration_feedbacks->isEmpty())
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-md-8 fw-medium">Belum ada feedback.</div>
                         </div>
                     @else
@@ -95,11 +95,11 @@
                                 <div class="col-md-4 text-muted">Status</div>
                                 <div class="col-md-8 fw-medium">{{ $feedback->status->label() ?? '-' }}</div>
                             </div>
-                            <div class="row mb-3">
+                            <div class="row">
                                 <div class="col-md-12 text-muted mb-3">Konten</div>
-                                <div class="col-md-12 fw-normal fs-6">{!! $feedback->content ? Str::markdown($feedback->content) : '-' !!}</div>
+                                <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $feedback->content ? Str::markdown($feedback->content) : '-' !!}</div>
                             </div>
-                            <hr>
+                            <hr class="mb-0">
                         @endforeach
                     @endif
                 </div>
@@ -110,8 +110,7 @@
                 <div class="card-body">
                     <h4 class="card-title fw-semibold mb-3">Aksi Cepat</h4>
                     @if (!in_array($aspiration->status, [AspirationStatusEnum::COMPLETED, AspirationStatusEnum::REJECTED]))
-                        <a href="{{ route('dashboard.student.aspirations.edit', $aspiration->id) }}"
-                            class="btn btn-warning w-100 mb-2">
+                        <a href="{{ route('dashboard.student.aspirations.edit', $aspiration->id) }}" class="btn btn-warning w-100 mb-2">
                             <i class="ti ti-pencil me-1"></i> Edit Aspirasi
                         </a>
                     @endif
@@ -131,7 +130,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal Preview Image -->
+    {{-- Modal Preview Image --}}
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-transparent border-0 shadow-none">
@@ -175,4 +174,9 @@
             });
         });
     </script>
+    <style>
+        .markdown-content p {
+            margin-bottom: 0 !important;
+        }
+    </style>
 @endsection
