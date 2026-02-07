@@ -47,15 +47,19 @@ class AspirationFeedbackController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AspirationFeedback $aspirationFeedback)
+    public function update(Request $request, AspirationFeedback $aspirationFeedback): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'content' => 'required|string',
+        ]);
+        $aspirationFeedback->update(['content' => $validated['content']]);
+        return redirect()->route('dashboard.admin.master-data.aspirations.show', $aspirationFeedback->aspiration->id)->with('success', 'Berhasil memperbarui data feedback aspirasi.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AspirationFeedback $aspirationFeedback)
+    public function destroy(AspirationFeedback $aspirationFeedback): RedirectResponse
     {
         $aspiration = $aspirationFeedback->aspiration;
         if (in_array($aspiration->status, [AspirationStatusEnum::REJECTED, AspirationStatusEnum::ON_GOING])) {
