@@ -98,8 +98,9 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): RedirectResponse
     {
-        //
+        $category->delete();
+        return redirect()->route('dashboard.admin.master-data.categories.index')->with('success', 'Berhasil menghapus data kategori');
     }
 }
