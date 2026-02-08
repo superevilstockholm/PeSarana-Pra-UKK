@@ -67,6 +67,7 @@
                                     <th class="text-center">#</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
+                                    <th>Dipakai Aspirasi</th>
                                     <th>Dibuat Pada</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -83,6 +84,7 @@
                                         </td>
                                         <td>{{ $category->name ?? '-' }}</td>
                                         <td>{{ $category->description ? Str::limit($category->description, 60, '...') : '-' }}</td>
+                                        <td>{{ $category->aspirations_count ?? '-' }}</td>
                                         <td>{{ $category->created_at?->format('d M Y H:i') }}</td>
                                         <td class="text-center">
                                             <div class="dropdown">

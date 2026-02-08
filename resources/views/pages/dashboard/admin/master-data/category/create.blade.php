@@ -36,7 +36,7 @@
                             @enderror
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Deskripsi" id="floatingTextareaDescription" style="height: 120px" required>{{ old('description') }}</textarea>
+                            <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Deskripsi" id="floatingTextareaDescription" style="height: 120px">{{ old('description') }}</textarea>
                             <label for="floatingTextareaDescription">Deskripsi</label>
                             @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
