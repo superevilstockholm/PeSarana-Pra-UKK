@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MasterData;
 
+use Throwable;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -85,6 +86,11 @@ class ClassroomController extends Controller
      */
     public function destroy(Classroom $classroom)
     {
-        //
+        try {
+            $classroom->delete();
+            return redirect()->route('dashboard.admin.master-data.classrooms.index')->with('success', 'Berhasil menghapus data kelas');
+        } catch (Throwable $e) {
+            return redirect()->route('dashboard.admin.master-data.classrooms.index')->withErrors($e->getMessage());
+        }
     }
 }
