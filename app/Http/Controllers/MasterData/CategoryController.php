@@ -64,7 +64,7 @@ class CategoryController extends Controller
     {
         return view('pages.dashboard.admin.master-data.category.edit', [
             'meta' => [
-                'siebarItems' => adminSidebarItems(),
+                'sidebarItems' => adminSidebarItems(),
             ],
             'category' => $category,
         ]);
