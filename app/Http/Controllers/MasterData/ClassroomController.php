@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MasterData;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 // Models
 use App\Models\MasterData\Classroom;
@@ -33,17 +34,26 @@ class ClassroomController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('pages.dashboard.admin.master-data.classroom.create', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ]
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:classrooms,name',
+            'description' => 'nullable|string',
+        ]);
+        Classroom::create($validated);
+        return redirect()->route('dashboard.admin.master-data.classrooms.index')->with('success', 'Berhasil membuat data kelas');
     }
 
     /**
