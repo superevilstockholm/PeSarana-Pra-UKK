@@ -113,7 +113,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="8" class="text-center">
                                             <div class="alert alert-warning my-2" role="alert">
                                                 Tidak ada data aspirasi yang ditemukan dengan kriteria tersebut.
                                             </div>

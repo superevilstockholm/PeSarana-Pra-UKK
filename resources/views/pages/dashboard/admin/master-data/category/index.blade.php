@@ -113,7 +113,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="alert alert-warning my-2" role="alert">
                                                 Tidak ada data kategori yang ditemukan dengan kriteria tersebut.
                                             </div>

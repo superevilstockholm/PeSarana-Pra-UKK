@@ -71,7 +71,6 @@
                                     <th>Judul</th>
                                     <th>Konten</th>
                                     <th>Status</th>
-                                    <th>Dibuat Oleh</th>
                                     <th>Dibuat Pada</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -92,7 +91,6 @@
                                         <td>{{ $aspiration->title ?? '-' }}</td>
                                         <td>{{ $aspiration->content ? Str::limit($aspiration->content, 60, '...') : '-' }}</td>
                                         <td>{{ $aspiration->status?->value ? ucwords(strtolower($aspiration->status->value)) : '-' }}</td>
-                                        <td>{{ $aspiration->student?->name ? ucwords(strtolower($aspiration->student->name)) : '-' }}</td>
                                         <td>{{ $aspiration->created_at?->format('d M Y H:i') }}</td>
                                         <td class="text-center">
                                             <div class="dropdown">
@@ -127,7 +125,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center">
+                                        <td colspan="7" class="text-center">
                                             <div class="alert alert-warning my-2" role="alert">
                                                 Tidak ada data aspirasi yang ditemukan dengan kriteria tersebut.
                                             </div>
