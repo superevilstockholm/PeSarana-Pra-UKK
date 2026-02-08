@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 
 // Models
 use App\Models\MasterData\Category;
+use Throwable;
 
 class CategoryController extends Controller
 {
@@ -18,7 +19,7 @@ class CategoryController extends Controller
     public function index(Request $request): View
     {
         $limit = $request->query('limit', 10);
-        $query = Category::query()->withCount('categories');
+        $query = Category::query()->withCount('aspirations');
         $categories = $limit === 'all'
             ? $query->get()
             : $query->paginate((int) $limit)
@@ -100,7 +101,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
-        return redirect()->route('dashboard.admin.master-data.categories.index')->with('success', 'Berhasil menghapus data kategori');
+        try {
+            $category->delete();
+            return redirect()->route('dashboard.admin.master-data.categories.index')->with('success', 'Berhasil menghapus data kategori');
+        } catch (Throwable $e) {
+            return redirect()->route('dashboard.admin.master-data.categories.index')->withErrors($e->getMessage());
+        }
     }
 }
