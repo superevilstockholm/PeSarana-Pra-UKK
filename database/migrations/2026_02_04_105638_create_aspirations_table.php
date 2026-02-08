@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('content');
             $table->string('location');
             $table->enum('status', ['pending', 'on_going', 'completed', 'rejected'])->default('pending');
-            $table->foreignId('student_id')->constrained();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

@@ -90,7 +90,7 @@
                                         </td>
                                         <td>{{ $aspiration->title ?? '-' }}</td>
                                         <td>{{ $aspiration->content ? Str::limit($aspiration->content, 60, '...') : '-' }}</td>
-                                        <td>{{ $aspiration->status?->value ? ucwords(strtolower($aspiration->status->value)) : '-' }}</td>
+                                        <td>{{ $aspiration->status?->label() ?? '-' }}</td>
                                         <td>{{ $aspiration->created_at?->format('d M Y H:i') }}</td>
                                         <td class="text-center">
                                             <div class="dropdown">
