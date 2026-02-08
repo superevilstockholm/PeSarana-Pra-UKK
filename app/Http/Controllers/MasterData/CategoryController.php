@@ -72,17 +72,27 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Category $category): View
     {
-        //
+        return view('pages.dashboard.admin.master-data.category.edit', [
+            'meta' => [
+                'siebarItems' => adminSidebarItems(),
+            ],
+            'category' => $category,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Category $category): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'description' => 'nullable|string',
+        ]);
+        $category->update($validated);
+        return redirect()->route('dashboard.admin.master-data.categories.index')->with('success', 'Berhasil mengubah data kategori');
     }
 
     /**
