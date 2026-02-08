@@ -99,7 +99,7 @@
                                 <div class="col-md-12 text-muted mb-3">Konten</div>
                                 <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $feedback->content ? Str::markdown($feedback->content) : '-' !!}</div>
                             </div>
-                            <hr class="mb-0">
+                            <hr {{ $loop->last ? 'class=mb-0' : ""}}>
                         @endforeach
                     @endif
                 </div>
@@ -175,7 +175,7 @@
         });
     </script>
     <style>
-        .markdown-content p {
+        .markdown-content p, .markdown-content ul {
             margin-bottom: 0 !important;
         }
     </style>
