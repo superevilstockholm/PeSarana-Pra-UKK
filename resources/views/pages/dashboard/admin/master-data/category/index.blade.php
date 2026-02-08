@@ -1,14 +1,12 @@
 @extends('layouts.dashboard')
-@section('title', 'Data Aspirasi - PeSarana')
-@section('meta-description', 'Daftar data aspirasi PeSarana')
-@section('meta-keywords', 'master data, data aspirasi, data aspirations, aspirasi, aspirations, PeSarana')
+@section('title', 'Data Kategori - PeSarana')
+@section('meta-description', 'Daftar data kategori PeSarana')
+@section('meta-keywords', 'master data, data kategori, data categories, kategori, categories, PeSarana')
 @section('content')
     <x-alerts :errors="$errors" />
     @php
         use Illuminate\Support\Str;
         use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-        // Enums
-        use App\Enums\AspirationStatusEnum;
     @endphp
     <div class="row mb-4">
         <div class="col">
@@ -16,13 +14,13 @@
                 <div
                     class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2 gap-lg-5">
                     <div class="d-flex flex-column">
-                        <h3 class="p-0 m-0 mb-1 fw-semibold">Data Aspirasi</h3>
-                        <p class="p-0 m-0 fw-medium text-muted">Manajemen data aspirasi siswa.</p>
+                        <h3 class="p-0 m-0 mb-1 fw-semibold">Data Kategori</h3>
+                        <p class="p-0 m-0 fw-medium text-muted">Manajemen data kategori siswa.</p>
                     </div>
                     <div class="d-flex align-items-center">
-                        <a href="{{ route('dashboard.student.aspirations.create') }}"
+                        <a href="{{ route('dashboard.admin.master-data.categories.create') }}"
                             class="btn btn-sm btn-primary px-4 rounded-pill m-0">
-                            <i class="ti ti-plus me-1"></i> Tambah Aspirasi
+                            <i class="ti ti-plus me-1"></i> Tambah Kategori
                         </a>
                     </div>
                 </div>
@@ -33,7 +31,7 @@
         <div class="col">
             <div class="card my-0">
                 <div class="card-body">
-                    <form method="GET" action="{{ route('dashboard.student.aspirations.index') }}" id="filterForm">
+                    <form method="GET" action="{{ route('dashboard.admin.master-data.categories.index') }}" id="filterForm">
                         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3 gap-2 gap-md-0">
                             <div class="d-flex align-items-center">
                                 @php
@@ -53,45 +51,41 @@
                                 <span class="ms-2">entries</span>
                             </div>
                             <div class="text-muted small">
-                                @if ($aspirations instanceof LengthAwarePaginator)
-                                    Menampilkan {{ $aspirations->firstItem() }} hingga {{ $aspirations->lastItem() }} dari
-                                    {{ $aspirations->total() }} total entri
+                                @if ($categories instanceof LengthAwarePaginator)
+                                    Menampilkan {{ $categories->firstItem() }} hingga {{ $categories->lastItem() }} dari
+                                    {{ $categories->total() }} total entri
                                 @else
-                                    Menampilkan {{ $aspirations->count() }} total entri
+                                    Menampilkan {{ $categories->count() }} total entri
                                 @endif
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive @if (!($aspirations instanceof LengthAwarePaginator && $aspirations->hasPages())) mb-0 @else mb-3 @endif">
+                    <div class="table-responsive @if (!($categories instanceof LengthAwarePaginator && $categories->hasPages())) mb-0 @else mb-3 @endif">
                         <table class="table table-striped table-hover align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
-                                    <th>Gambar Cover</th>
                                     <th>Judul</th>
-                                    <th>Konten</th>
-                                    <th>Status</th>
+                                    <th>Deskripsi</th>
+                                    <th>Dipakai Aspirasi</th>
                                     <th>Dibuat Pada</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($aspirations as $index => $aspiration)
+                                @forelse ($categories as $index => $category)
                                     <tr>
                                         <td class="text-center">
-                                            @if ($aspirations instanceof LengthAwarePaginator)
-                                                {{ $aspirations->firstItem() + $loop->index }}
+                                            @if ($categories instanceof LengthAwarePaginator)
+                                                {{ $categories->firstItem() + $loop->index }}
                                             @else
                                                 {{ $loop->iteration }}
                                             @endif
                                         </td>
-                                        <td>
-                                            <img class="object-fit-cover rounded" style="width: 100px; height: 100px; object-position: center;" src="{{ $aspiration->aspiration_images->first() ? $aspiration->aspiration_images->first()->image_path_url : asset('static/img/no-image-placeholder.svg') }}" alt="{{ $aspiration->title ?? '-' }}">
-                                        </td>
-                                        <td>{{ $aspiration->title ?? '-' }}</td>
-                                        <td>{{ $aspiration->content ? Str::limit($aspiration->content, 60, '...') : '-' }}</td>
-                                        <td>{{ $aspiration->status?->value ? ucwords(strtolower($aspiration->status->value)) : '-' }}</td>
-                                        <td>{{ $aspiration->created_at?->format('d M Y H:i') }}</td>
+                                        <td>{{ $category->name ?? '-' }}</td>
+                                        <td>{{ $category->description ? Str::limit($category->description, 60, '...') : '-' }}</td>
+                                        <td>{{ $category->aspirations_count ?? '-' }}</td>
+                                        <td>{{ $category->created_at?->format('d M Y H:i') }}</td>
                                         <td class="text-center">
                                             <div class="dropdown">
                                                 <button type="button" class="btn border-0 p-0 dropdown-toggle hide-arrow"
@@ -100,22 +94,16 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('dashboard.student.aspirations.show', $aspiration->id) }}">
-                                                        <i class="ti ti-eye me-1"></i> Lihat
+                                                        href="{{ route('dashboard.admin.master-data.categories.edit', $category->id) }}">
+                                                        <i class="ti ti-pencil me-1"></i> Edit
                                                     </a>
-                                                    @if ($aspiration->status === AspirationStatusEnum::PENDING)
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('dashboard.student.aspirations.edit', $aspiration->id) }}">
-                                                            <i class="ti ti-pencil me-1"></i> Edit
-                                                        </a>
-                                                    @endif
-                                                    <form id="form-delete-{{ $aspiration->id }}"
-                                                        action="{{ route('dashboard.student.aspirations.destroy', $aspiration->id) }}"
+                                                    <form id="form-delete-{{ $category->id }}"
+                                                        action="{{ route('dashboard.admin.master-data.categories.destroy', $category->id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button" class="dropdown-item text-danger btn-delete"
-                                                            data-id="{{ $aspiration->id }}" data-name="{{ $aspiration->title }}">
+                                                            data-id="{{ $category->id }}" data-name="{{ $category->name }}">
                                                             <i class="ti ti-trash me-1 text-danger"></i> Hapus
                                                         </button>
                                                     </form>
@@ -125,9 +113,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <div class="alert alert-warning my-2" role="alert">
-                                                Tidak ada data aspirasi yang ditemukan dengan kriteria tersebut.
+                                                Tidak ada data kategori yang ditemukan dengan kriteria tersebut.
                                             </div>
                                         </td>
                                     </tr>
@@ -135,10 +123,10 @@
                             </tbody>
                         </table>
                     </div>
-                    @if ($aspirations instanceof LengthAwarePaginator && $aspirations->hasPages())
+                    @if ($categories instanceof LengthAwarePaginator && $categories->hasPages())
                         <div class="overflow-x-auto mt-0 py-1">
                             <div class="d-flex justify-content-center d-md-block w-100 px-3">
-                                {{ $aspirations->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
+                                {{ $categories->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
                             </div>
                         </div>
                     @endif
@@ -150,11 +138,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.btn-delete').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    const aspirationId = this.getAttribute('data-id');
-                    const aspirationTitle = this.getAttribute('data-name');
+                    const categoryId = this.getAttribute('data-id');
+                    const categoryName = this.getAttribute('data-name');
                     Swal.fire({
-                        title: "Hapus Aspirasi?",
-                        text: "Apakah Anda yakin ingin menghapus aspirasi \"" + aspirationTitle + "\"? Aksi ini tidak dapat dibatalkan.",
+                        title: "Hapus Kategori?",
+                        text: "Apakah Anda yakin ingin menghapus Kategori \"" + categoryName + "\"? Aksi ini tidak dapat dibatalkan.",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#d33",
@@ -163,7 +151,7 @@
                         cancelButtonText: "Batal"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            document.getElementById('form-delete-' + aspirationId).submit();
+                            document.getElementById('form-delete-' + categoryId).submit();
                         }
                     });
                 });
