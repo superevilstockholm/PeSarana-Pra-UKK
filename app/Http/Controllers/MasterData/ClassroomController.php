@@ -76,7 +76,7 @@ class ClassroomController extends Controller
     public function update(Request $request, Classroom $classroom): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:classrooms,name',
+            'name' => 'required|string|max:255|unique:classrooms,name,' . $classroom->id,
             'description' => 'nullable|string',
         ]);
         $classroom->update($validated);
