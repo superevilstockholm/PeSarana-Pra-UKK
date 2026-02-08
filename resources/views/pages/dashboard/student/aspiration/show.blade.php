@@ -95,6 +95,12 @@
                                 <div class="col-md-4 text-muted">Status</div>
                                 <div class="col-md-8 fw-medium">{{ $feedback->status->label() ?? '-' }}</div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 text-muted">Pembuat Feedback</div>
+                                <div class="col-md-8 fw-medium d-flex justify-content-between align-items-center">
+                                    <span>{{ $feedback->user?->name ? ucwords(strtolower($feedback->user->name)) : '-' }}</span>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12 text-muted mb-3">Konten</div>
                                 <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $feedback->content ? Str::markdown($feedback->content) : '-' !!}</div>
