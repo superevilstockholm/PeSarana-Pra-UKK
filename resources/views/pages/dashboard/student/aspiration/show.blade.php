@@ -133,7 +133,7 @@
     {{-- Modal Preview Image --}}
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-content border-0 shadow-none bg-transparent">
                 <div class="modal-body p-0 text-center">
                     <img id="previewImage" src="" class="img-fluid rounded shadow" alt="Preview">
                 </div>

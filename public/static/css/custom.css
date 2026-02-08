@@ -186,11 +186,11 @@ input:-webkit-autofill:active {
 }
 
 html[data-bs-theme="dark"] .modal-content {
-    background-color: rgb(24, 24, 24) !important;
+    background-color: rgb(24, 24, 24);
 }
 html[data-bs-theme="dark"] .modal-header {
-    border-bottom-color: rgb(33, 33, 33) !important;
+    border-bottom-color: rgb(33, 33, 33);
 }
 html[data-bs-theme="dark"] .modal-footer {
-    border-top-color: rgb(33, 33, 33) !important;
+    border-top-color: rgb(33, 33, 33);
 }

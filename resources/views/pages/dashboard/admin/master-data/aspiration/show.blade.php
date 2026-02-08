@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <h4 class="card-title fw-semibold mb-3">Data Aspirasi</h4>
                     <div class="row mb-4">
-                        <div class="col d-flex align-items-center gap-2">
+                        <div class="col d-flex flex-wrap align-items-center gap-2">
                             @foreach ($aspiration->aspiration_images as $image)
                             <img class="object-fit-cover rounded me-2 mb-2 img-preview"
                                 style="height: 150px; width: 150px; cursor: zoom-in;"
@@ -177,7 +177,7 @@
     {{-- Modal Preview Image --}}
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-content border-0 shadow-none bg-transparent">
                 <div class="modal-body p-0 text-center">
                     <img id="previewImage" src="" class="img-fluid rounded shadow" alt="Preview">
                 </div>
