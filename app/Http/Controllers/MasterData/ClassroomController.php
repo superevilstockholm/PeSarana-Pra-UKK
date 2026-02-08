@@ -58,33 +58,35 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Classroom $classroom)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Classroom $classroom)
+    public function edit(Classroom $classroom): View
     {
-        //
+        return view('pages.dashboard.admin.master-data.classroom.edit', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'classroom' => $classroom,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Classroom $classroom)
+    public function update(Request $request, Classroom $classroom): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:classrooms,name',
+            'description' => 'nullable|string',
+        ]);
+        $classroom->update($validated);
+        return redirect()->route('dashboard.admin.master-data.classrooms.index')->with('success', 'Berhasil mengubah data kelas');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Classroom $classroom)
+    public function destroy(Classroom $classroom): RedirectResponse
     {
         try {
             $classroom->delete();
