@@ -37,7 +37,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
             Route::prefix('master-data')->name('master-data.')->group(function () {
                 Route::resource('categories', CategoryController::class)->parameters([
                     'categories' => 'category'
-                ]);
+                ])->except(['show']);
                 Route::resource('aspirations', AspirationController::class)->parameters([
                     'aspirations' => 'aspiration',
                 ])->only(['index', 'show', 'destroy']);
