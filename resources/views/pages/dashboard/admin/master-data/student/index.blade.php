@@ -5,7 +5,6 @@
 @section('content')
     <x-alerts :errors="$errors" />
     @php
-        use Illuminate\Support\Str;
         use Illuminate\Contracts\Pagination\LengthAwarePaginator;
     @endphp
     <div class="row mb-4">
