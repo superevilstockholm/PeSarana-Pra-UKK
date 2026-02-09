@@ -26,17 +26,14 @@ class AspirationController extends Controller
         $user = $request->user()->load('student');
         $limit = $request->query('limit', 10);
         $query = Aspiration::query()->with(['student', 'category', 'aspiration_images']);
-
         // Scoped student for student user
         if ($user->role === RoleEnum::STUDENT && $user->student) {
             $query->where('student_id', $user->student->id);
         }
-
         $aspirations = $limit === 'all'
             ? $query->get()
             : $query->paginate((int) $limit)
                 ->appends($request->except('page'));
-
         return view($user->role === RoleEnum::ADMIN
             ? 'pages.dashboard.admin.master-data.aspiration.index'
             : 'pages.dashboard.student.aspiration.index', [
