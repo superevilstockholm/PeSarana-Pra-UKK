@@ -65,7 +65,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
-                                    <th>Judul</th>
+                                    <th>Nama</th>
                                     <th>Deskripsi</th>
                                     <th>Dipakai Oleh</th>
                                     <th>Dibuat Pada</th>

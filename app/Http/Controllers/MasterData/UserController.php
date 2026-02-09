@@ -28,7 +28,7 @@ class UserController extends Controller
             ? $query->get()
             : $query->paginate((int) $limit)
                 ->appends($request->except('page'));
-        return view('pages.dashboard.admin.master-data.users.index', [
+        return view('pages.dashboard.admin.master-data.user.index', [
             'meta' => [
                 'sidebarItems' => adminSidebarItems(),
             ],
