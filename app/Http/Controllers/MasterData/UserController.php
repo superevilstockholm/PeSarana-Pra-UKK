@@ -84,7 +84,7 @@ class UserController extends Controller
             'meta' => [
                 'sidebarItems' => adminSidebarItems(),
             ],
-            'students' => $user->loadCount('aspiration_feedbacks')->load('student'),
+            'user' => $user->loadCount('aspiration_feedbacks')->load('student'),
         ]);
     }
 
