@@ -91,17 +91,46 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(User $user): View
     {
-        //
+        $students = Student::all();
+        return view('pages.dashboard.admin.master-data.user.edit', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'students' => $students,
+            'user' => $user,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|max:255',
+            'role' => 'required|in:student,admin',
+            'name' => 'nullable|required_if:role,admin',
+            'student_id' => 'nullable|required_if:role,student|exists:students,id',
+        ]);
+        if ($validated['role'] === RoleEnum::STUDENT->value) {
+            $student = Student::findOrFail($validated['student_id']);
+            $validated['name'] = $student->name;
+        }
+        unset($validated['student_id']);
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+        $user->update($validated);
+        Student::where('user_id', $user->id)->update(['user_id' => null]);
+        if ($validated['role'] === RoleEnum::STUDENT->value) {
+            $student->update(['user_id' => $user->id]);
+        }
+        return redirect()->route('dashboard.admin.master-data.users.index')->with('success', 'Berhasil mengubah data pengguna.');
     }
 
     /**
