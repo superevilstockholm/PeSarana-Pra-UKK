@@ -105,15 +105,19 @@ class StudentController extends Controller
                 'name' => $validated['name'],
             ]);
         }
-        Student::update($validated);
+        $student->update($validated);
         return redirect()->route('dashboard.admin.master-data.students.index')->with('success', 'Berhasil mengubah data siswa.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(Student $student): RedirectResponse
     {
-        //
+        if ($student->user) {
+            $student->user->delete();
+        }
+        $student->delete();
+        return redirect()->route('dashboard.admin.master-data.students.index')->with('success', 'Berhasil menghapus data siswa.');
     }
 }
