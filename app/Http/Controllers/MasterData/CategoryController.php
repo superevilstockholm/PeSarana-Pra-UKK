@@ -58,6 +58,19 @@ class CategoryController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Category $category): View
+    {
+        return view('pages.dashboard.admin.master-data.category.show', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'category' => $category->loadCount(['aspirations']),
+        ]);
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Category $category): View
