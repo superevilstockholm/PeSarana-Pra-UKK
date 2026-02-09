@@ -93,7 +93,9 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $students = Student::all();
+        $students = Student::whereNull('user_id')
+            ->orWhere('user_id', $user->id)
+            ->get();
         return view('pages.dashboard.admin.master-data.user.edit', [
             'meta' => [
                 'sidebarItems' => adminSidebarItems(),
