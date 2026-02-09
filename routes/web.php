@@ -39,7 +39,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
             Route::prefix('master-data')->name('master-data.')->group(function () {
                 Route::resource('categories', CategoryController::class)->parameters([
                     'categories' => 'category'
-                ])->except(['show']);
+                ]);
                 Route::resource('classrooms', ClassroomController::class)->parameters([
                     'classrooms' => 'classroom'
                 ]);
