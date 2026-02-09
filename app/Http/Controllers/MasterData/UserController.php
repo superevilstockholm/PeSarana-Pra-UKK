@@ -41,7 +41,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $students = Student::all();
+        $students = Student::whereNull('user_id')->get();
         return view('pages.dashboard.admin.master-data.user.create', [
             'meta' => [
                 'sidebarItems' => adminSidebarItems(),
