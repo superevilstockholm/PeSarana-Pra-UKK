@@ -94,6 +94,10 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item"
+                                                        href="{{ route('dashboard.admin.master-data.classrooms.show', $classroom->id) }}">
+                                                        <i class="ti ti-eye me-1"></i> Lihat
+                                                    </a>
+                                                    <a class="dropdown-item"
                                                         href="{{ route('dashboard.admin.master-data.classrooms.edit', $classroom->id) }}">
                                                         <i class="ti ti-pencil me-1"></i> Edit
                                                     </a>
