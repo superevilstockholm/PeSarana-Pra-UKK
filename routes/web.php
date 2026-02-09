@@ -42,7 +42,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
                 ])->except(['show']);
                 Route::resource('classrooms', ClassroomController::class)->parameters([
                     'classrooms' => 'classroom'
-                ])->except(['show']);
+                ]);
                 Route::resource('students', StudentController::class)->parameters([
                     'students' => 'student'
                 ]);

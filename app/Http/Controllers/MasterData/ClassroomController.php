@@ -58,6 +58,20 @@ class ClassroomController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(Classroom $classroom): View
+    {
+        return view('pages.dashboard.admin.master-data.classroom.show', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'classroom' => $classroom->loadCount(['students']),
+        ]);
+    }
+
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Classroom $classroom): View
