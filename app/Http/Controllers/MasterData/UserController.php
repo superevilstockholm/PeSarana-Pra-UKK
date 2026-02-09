@@ -78,9 +78,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user): View
     {
-        //
+        return view('pages.dashboard.admin.master-data.user.show', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'students' => $user->loadCount('aspiration_feedbacks')->load('student'),
+        ]);
     }
 
     /**
