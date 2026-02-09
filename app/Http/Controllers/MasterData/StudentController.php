@@ -77,17 +77,36 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit(Student $student): View
     {
-        //
+        $classrooms = Classroom::all();
+        return view('pages.dashboard.admin.master-data.student.edit', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'classrooms' => $classrooms,
+            'student' => $student,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, Student $student): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'nisn' => 'required|digits:10|unique:students,nisn,' . $student->id,
+            'name' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'classroom_id' => 'required|exists:classrooms,id',
+        ]);
+        if ($student->user) {
+            $student->user->update([
+                'name' => $validated['name'],
+            ]);
+        }
+        Student::update($validated);
+        return redirect()->route('dashboard.admin.master-data.students.index')->with('success', 'Berhasil mengubah data siswa.');
     }
 
     /**
