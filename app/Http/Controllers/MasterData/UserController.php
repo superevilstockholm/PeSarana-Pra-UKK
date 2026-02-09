@@ -5,9 +5,15 @@ namespace App\Http\Controllers\MasterData;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 
 // Models
 use App\Models\User;
+use App\Models\MasterData\Student;
+
+// Enums
+use App\Enums\RoleEnum;
 
 class UserController extends Controller
 {
@@ -33,17 +39,40 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $students = Student::all();
+        return view('pages.dashboard.admin.master-data.user.create', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'students' => $students,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|max:255',
+            'role' => 'required|in:student,admin',
+            'name' => 'nullable|required_if:role,admin',
+            'student_id' => 'nullable|required_if:role,student|exists:students,id',
+        ]);
+        if ($validated['role'] === RoleEnum::STUDENT->value) {
+            $student = Student::findOrFail($validated['student_id']);
+            $validated['name'] = $student->name;
+        }
+        unset($validated['student_id']);
+        $validated['password'] = Hash::make($validated['password']);
+        $user = User::create($validated);
+        if ($validated['role'] === RoleEnum::STUDENT->value) {
+            $student->update(['user_id' => $user->id]);
+        }
+        return redirect()->route('dashboard.admin.master-data.users.index')->with('success', 'Berhasil membuat data pengguna.');
     }
 
     /**
