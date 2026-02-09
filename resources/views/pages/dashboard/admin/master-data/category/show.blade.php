@@ -36,6 +36,10 @@
                         <div class="col-md-8 fw-medium">{{ $category->name ? ucwords(strtolower($category->name)) : '-' }}</div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-md-4 text-muted">Dipakai Oleh</div>
+                        <div class="col-md-8 fw-medium">{{ $category->aspirations_count ?? '0' }} Aspirasi</div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-12 text-muted mb-3">Deskripsi</div>
                         <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $category->description ? Str::markdown($category->description) : '-' !!}</div>
                     </div>

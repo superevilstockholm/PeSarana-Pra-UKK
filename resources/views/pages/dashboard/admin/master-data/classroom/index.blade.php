@@ -84,7 +84,7 @@
                                         </td>
                                         <td>{{ $classroom->name ?? '-' }}</td>
                                         <td>{{ $classroom->description ? Str::limit($classroom->description, 60, '...') : '-' }}</td>
-                                        <td>{{ $classroom->students_count ?? '-' }}</td>
+                                        <td>{{ $classroom->students_count ?? '0' }} Siswa</td>
                                         <td>{{ $classroom->created_at?->format('d M Y H:i') }}</td>
                                         <td class="text-center">
                                             <div class="dropdown">

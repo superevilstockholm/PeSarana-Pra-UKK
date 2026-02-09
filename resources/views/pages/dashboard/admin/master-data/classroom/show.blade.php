@@ -36,6 +36,10 @@
                         <div class="col-md-8 fw-medium">{{ $classroom->name ? ucwords(strtolower($classroom->name)) : '-' }}</div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-md-4 text-muted">Jumlah Siswa</div>
+                        <div class="col-md-8 fw-medium">{{ $classroom->students_count ?? '0' }} Siswa</div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-12 text-muted mb-3">Deskripsi</div>
                         <div class="col-md-12 fw-normal fs-6 markdown-content">{!! $classroom->description ? Str::markdown($classroom->description) : '-' !!}</div>
                     </div>
