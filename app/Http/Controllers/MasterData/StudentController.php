@@ -5,9 +5,11 @@ namespace App\Http\Controllers\MasterData;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 // Models
 use App\Models\MasterData\Student;
+use App\Models\MasterData\Classroom;
 
 class StudentController extends Controller
 {
@@ -33,17 +35,30 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $classrooms = Classroom::all();
+        return view('pages.dashboard.admin.master-data.student.create', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'classrooms' => $classrooms,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'nisn' => 'required|digits:10|unique:students,nisn',
+            'name' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'classroom_id' => 'required|exists:classrooms,id',
+        ]);
+        Student::create($validated);
+        return redirect()->route('dashboard.admin.master-data.students.index')->with('success', 'Berhasil membuat data siswa.');
     }
 
     /**
