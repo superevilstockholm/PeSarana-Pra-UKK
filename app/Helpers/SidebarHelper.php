@@ -10,6 +10,7 @@ if (!function_exists('adminSidebarItems')) {
             'master data' => [
                 ['label' => 'categories', 'icon' => 'ti ti-tag', 'route' => 'dashboard.admin.master-data.categories.index', 'active_pattern' => 'dashboard.admin.master-data.categories.*'],
                 ['label' => 'classrooms', 'icon' => 'ti ti-chalkboard-teacher', 'route' => 'dashboard.admin.master-data.classrooms.index', 'active_pattern' => 'dashboard.admin.master-data.classrooms.*'],
+                ['label' => 'students', 'icon' => 'ti ti-school', 'route' => 'dashboard.admin.master-data.students.index', 'active_pattern' => 'dashboard.admin.master-data.students.*'],
                 ['label' => 'aspirations', 'icon' => 'ti ti-flag', 'route' => 'dashboard.admin.master-data.aspirations.index', 'active_pattern' => 'dashboard.admin.master-data.aspirations.*'],
             ],
         ];
