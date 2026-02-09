@@ -64,9 +64,14 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Student $student): View
     {
-        //
+        return view('pages.dashboard.admin.master-data.student.show', [
+            'meta' => [
+                'sidebarItems' => adminSidebarItems(),
+            ],
+            'student' => $student->load(['user', 'classroom', 'aspirations']),
+        ]);
     }
 
     /**
