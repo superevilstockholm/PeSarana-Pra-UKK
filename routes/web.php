@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 // Auth Controller
 use App\Http\Controllers\AuthController;
 
+// Dashboard Controller
+use App\Http\Controllers\DashboardController;
+
 // Master Data Controllers
 use App\Http\Controllers\MasterData\UserController;
 use App\Http\Controllers\MasterData\StudentController;
@@ -30,13 +33,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
-            Route::get('/', function () {
-                return view('pages.dashboard.admin.index', [
-                    'meta' => [
-                        'sidebarItems' => adminSidebarItems(),
-                    ]
-                ]);
-            })->name('index');
+            Route::get('/', [DashboardController::class, 'admin'])->name('index');
             Route::prefix('master-data')->name('master-data.')->group(function () {
                 Route::resource('classrooms', ClassroomController::class)->parameters([
                     'classrooms' => 'classroom'
@@ -59,13 +56,7 @@ Route::middleware(['auth.sanctum.cookie'])->group(function () {
             });
         });
         Route::middleware(['role:student'])->prefix('student')->name('student.')->group(function () {
-            Route::get('/', function () {
-                return view('pages.dashboard.student.index', [
-                    'meta' => [
-                        'sidebarItems' => studentSidebarItems(),
-                    ]
-                ]);
-            })->name('index');
+            Route::get('/', [DashboardController::class, 'student'])->name('index');
             Route::resource('aspirations', AspirationController::class)->parameters([
                 'aspirations' => 'aspiration',
             ]);
