@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 // Models
 use App\Models\User;
@@ -38,6 +39,7 @@ class DashboardController extends Controller
             'on_going_aspirations_count' => $on_going_aspirations_count,
             'rejected_aspirations_count' => $rejected_aspirations_count,
         ];
+
         return view('pages.dashboard.admin.index', [
             'meta' => [
                 'sidebarItems' => adminSidebarItems(),
@@ -46,12 +48,36 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function student(): View
+    public function student(Request $request): View
     {
+        $student_id = $request->user()->student->id;
+        $student_aspirations_count = Aspiration::where('student_id', $student_id)->count();
+        $student_pending_aspirations_count = Aspiration::where('student_id', $student_id)
+            ->where('status', AspirationStatusEnum::PENDING)
+            ->count();
+        $student_on_going_aspirations_count = Aspiration::where('student_id', $student_id)
+            ->where('status', AspirationStatusEnum::ON_GOING)
+            ->count();
+        $student_completed_aspirations_count = Aspiration::where('student_id', $student_id)
+            ->where('status', AspirationStatusEnum::COMPLETED)
+            ->count();
+        $student_rejected_aspirations_count = Aspiration::where('student_id', $student_id)
+            ->where('status', AspirationStatusEnum::REJECTED)
+            ->count();
+
+        $stats = [
+            'student_aspirations_count' => $student_aspirations_count,
+            'student_pending_aspirations_count' => $student_pending_aspirations_count,
+            'student_completed_aspirations_count' => $student_completed_aspirations_count,
+            'student_on_going_aspirations_count' => $student_on_going_aspirations_count,
+            'student_rejected_aspirations_count' => $student_rejected_aspirations_count,
+        ];
+
         return view('pages.dashboard.student.index', [
             'meta' => [
                 'sidebarItems' => studentSidebarItems(),
-            ]
+            ],
+            'stats' => $stats
         ]);
     }
 }
