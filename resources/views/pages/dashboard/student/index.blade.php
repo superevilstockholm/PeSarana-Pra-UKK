@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
-@section('title', '')
-@section('meta-description', '')
-@section('meta-keywords', '')
+@section('title', 'Dashboard Siswa - PeSarana')
+@section('meta-description', 'Dashboard untuk user siswa')
+@section('meta-keywords', 'dashboard, siswa, student, protected')
 @section('content')
     <div class="row g-3 mb-3 mb-md-4">
         <div class="col-12 col-sm-6 col-md-3 mb-0">
